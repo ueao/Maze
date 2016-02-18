@@ -24,11 +24,11 @@ class ViewController: UIViewController {
     
     var wallRectArray: [CGRect] = []
     
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-    }
+//    
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//        // Do any additional setup after loading the view, typically from a nib.
+//    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -48,7 +48,6 @@ class ViewController: UIViewController {
     [0, 0, 1, 1, 1, 2],
         ]
     
-//viewLoadにエラー
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -80,6 +79,7 @@ class ViewController: UIViewController {
             }
         }
     }
+    
         playerView = UIView(frame: CGRectMake(0, 0, screenSize.width / 60, screenSize.height / 60))
         playerView.center = startView.center
         playerView.backgroundColor = UIColor.grayColor()
@@ -102,34 +102,37 @@ func createView(x x: Int, y: Int, width: CGFloat, height: CGFloat, offsetX: CGFl
     view.center = center
     return view
 }
-    func startAccelerometer() {
-        let handler: CMAccelerometerHandler = {(accelerometerData: CMAccelerometerData?, error: NSError?) -> Void in
-            self.speedX += accelerometerData!.acceleration.x
-            self.speedY += accelerometerData!.acceleration.y
+            func startAccelerometer() {
+                
+                let handler: CMAccelerometerHandler = {(accelerometerData: CMAccelerometerData?, error:NSError?) -> Void in
+                    
+                    self.speedX += accelerometerData!.acceleration.x
+                    self.speedY += accelerometerData!.acceleration.y
             
-            var posX = self.playerView.center.x + (CGFloat(self.speedX) / 3)
-            var posY = self.playerView.center.y - (CGFloat(self.speedY) / 3)
+                    var posX = self.playerView.center.x + (CGFloat(self.speedX) / 3)
+                    var posY = self.playerView.center.y - (CGFloat(self.speedY) / 3)
             
-            if posX <= (self.playerView.frame.width / 2) {
-                self.speedX = 0.0
-                posX = self.playerView.frame.width / 2
-            }
-            if posY <= (self.playerView.frame.height / 2) {
-                self.speedY = 0.0
-                posY = self.playerView.frame.height / 2
-            }
-            if posX >= (self.screenSize.width - (self.playerView.frame.width / 2)) {
-                self.speedX = 0.0
-                posX = self.screenSize.width - (self.playerView.frame.width / 2)
-            }
-            if posY >= (self.screenSize.height - (self.playerView.frame.height / 2)) {
-                self.speedY = 0.0
-                posY = self.screenSize.height - (self.playerView.frame.height / 2)
-            }
-            
+                    if posX <= (self.playerView.frame.width / 2) {
+                        self.speedX = 0.0
+                        posX = self.playerView.frame.width / 2
+                    }
+                    if posY <= (self.playerView.frame.height / 2) {
+                        self.speedY = 0.0
+                        posY = self.playerView.frame.height / 2
+                    }
+                    if posX >= (self.screenSize.width - (self.playerView.frame.width / 2)) {
+                        self.speedX = 0.0
+                        posX = self.screenSize.width - (self.playerView.frame.width / 2)
+                    }
+                    if posY >= (self.screenSize.height - (self.playerView.frame.height / 2)) {
+                        self.speedY = 0.0
+                        posY = self.screenSize.height - (self.playerView.frame.height / 2)
+                    }
+                }
+    }
+//forにエラー
             for wallRect in self.wallRectArray {
                 if (CGRectIntersectsRect(wallRect, self.playerView.frame)) {
-//gameCheckにエラー
                     self.gameCheck("GameOver",message: "壁に当たりました。")
                     return
                 }
@@ -140,23 +143,28 @@ func createView(x x: Int, y: Int, width: CGFloat, height: CGFloat, offsetX: CGFl
                 }
             
             self.playerView.center = CGPointMake(posX, posY)
-        }
-        
-        
+    
+    
+    playerMotionManager.startAccelerometerUpdatesToQueue(NSOperationQueue.mainQueue(), withHandler: handler)
+
             func gameCheck(result: String, message: String) {
+                
+                
                 if playerMotionManager.accelerometerActive {
                     playerMotionManager.stopAccelerometerUpdates()
                 }
-                
+    
+    
                 let gameCheckAlert: UIAlertController = UIAlertController(title: result, message: message, preferredStyle: .Alert)
-                let retryAction = UIAlertAction(title: "もう一度", style: .Default) {
-                    action in
-//self.retry()にエラー
+//sel.retryにエラー
+        
+                let retryAction = UIAlertAction(title: "もう一度", style: .Default) { action in
                     self.retry()
                 }
+    
                 gameCheckAlert.addAction(retryAction)
                 self.presentViewController(gameCheckAlert, animated: true, completion: nil)
-            }
+    
             // リトライ処理
             func retry() {
                 playerView.center = startView.center
@@ -168,8 +176,8 @@ func createView(x x: Int, y: Int, width: CGFloat, height: CGFloat, offsetX: CGFl
                 speedY = 0.0
             }
         
-        
-        playerMotionManager.startAccelerometerUpdatesToQueue(NSOperationQueue.mainQueue(), withHandler: handler)
+    
 }
+
 
 }
